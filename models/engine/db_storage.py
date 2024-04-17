@@ -9,12 +9,8 @@ from models.place import Place
 from models.review import Review
 from models.state import State
 from models.user import User
+from models.base_model import BaseModel
 
-if getenv('HBNB_TYPE_STORAGE') == 'db':
-    from models.place import place_amenity
-
-classes = {"User": User, "State": State, "City": City,
-           "Amenity": Amenity, "Place": Place, "Review": Review}
 
 class DBStorage:
     """Private class attributes"""
@@ -50,13 +46,22 @@ class DBStorage:
             * key = <class-name>.<object-id>
             * value = object
         """
-        n_dict = {}
+        dic = {}
         if cls:
-            objs = self.__session.query(cls).all()
-            for obj in objs:
-                key = '{}.{}'.format(type(obj).__name__, obj.id)
-                n_dict[key] = obj
-        return n_dict
+            if type(cls) is str:
+                cls = eval(cls)
+            query = self.__session.query(cls)
+            for elem in query:
+                key = "{}.{}".format(type(elem).__name__, elem.id)
+                dic[key] = elem
+        else:
+            lista = [State, City, User, Place, Review, Amenity]
+            for clase in lista:
+                query = self.__session.query(clase)
+                for elem in query:
+                    key = "{}.{}".format(type(elem).__name__, elem.id)
+                    dic[key] = elem
+        return (dic)
 
     def new(self, obj):
         """add the object to the current database session"""
