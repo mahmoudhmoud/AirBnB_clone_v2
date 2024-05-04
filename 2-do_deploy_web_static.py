@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-''' sawab ala assas iksda tam '''
+""" affasfsg dsg dfg """
 
 from fabric.api import put, run, env
 from os.path import exists
@@ -7,13 +7,13 @@ env.hosts = ['34.202.157.120', '107.20.13.19']
 
 
 def do_deploy(archive_path):
-    ''' ldakira dyal dawwe '''
+    """ sgsgty ertyerh """
     if exists(archive_path) is False:
         return False
     try:
         file_n = archive_path.split("/")[-1]
         no_ext = file_n.split(".")[0]
-        path = '/data/web_static/releases/'
+        path = "/data/web_static/releases/"
         put(archive_path, '/tmp/')
         run('mkdir -p {}{}/'.format(path, no_ext))
         run('tar -xzf /tmp/{} -C {}{}/'.format(file_n, path, no_ext))
